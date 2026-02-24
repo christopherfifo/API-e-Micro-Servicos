@@ -1,0 +1,5 @@
+# Proposta de Evolução do Sistema de Cadastro
+
+Uma melhoria fundamental para o diagrama apresentado seria a substituição da classe manual Data pelas bibliotecas nativas do Java, como o java.time.LocalDate. Isso evita erros comuns de validação (como dias inexistentes ou anos bissextos) e facilita cálculos de idade e formatação regionalizada, tornando o código mais profissional e menos propenso a bugs.
+
+Além disso, do ponto de vista da arquitetura OO, o sistema se beneficiaria do uso de Encapsulamento mais rígido. Atualmente, muitos atributos no diagrama parecem públicos ou protegidos. O uso de modificadores private com métodos getters e setters, ou até o uso de Records (disponíveis a partir do Java 16), garantiria uma maior integridade dos dados e facilitaria a integração com frameworks modernos como o Spring Boot.
