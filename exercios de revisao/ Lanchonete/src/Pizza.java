@@ -14,7 +14,7 @@ class Pizza extends Prato {
 
 @Override
 public String toString() {
-    return "Pizza de " + recheio + "com molho de" + molho + " (Borda: " + borda + ")" + super.dadosComuns();
+    return "Pizza de " + recheio + "com molho de " + molho + " (Borda: " + borda + ")" + super.dadosComuns();
 }
 
     @Override
