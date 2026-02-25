@@ -7,7 +7,7 @@ public class Cdi extends Conta {
 
     @Override
     public double calcular(int dias, double taxa) {
-        double cdi = 0.01;
+        double cdi = 0.01; 
         double diario = cdi / 30.0;
         double lucro = saldo * (diario * dias);
         double desconto = lucro * 0.0007;
