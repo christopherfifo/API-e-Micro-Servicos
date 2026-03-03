@@ -1,150 +1,215 @@
 package exercicios34_vcRiquinho;
+
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
-        Db banco = new Db();
-        
-        // executar testes
-        Scanner leitor = new Scanner(System.in);
-        int opcao = 0;
-        
-        while (opcao != 9) {
-        	System.out.println("Escolha uma opcao: ");
-        	System.out.println("1 - Novo cliente PF ");
-        	System.out.println("2 - Novo cliente PJ ");
-        	System.out.println("3 - Listar clientes ");
-        	System.out.println("4 - Novo produto renda fixa ");
-        	System.out.println("5 - Novo produto renda variavel ");
-        	System.out.println("6 - Listar produtos ");
-        	System.out.println("7 - Simular rendimento ");
-        	System.out.println("8 - Simular conta CDI");
-        	System.out.println("9 - Sair ");
-        	System.out.println("Escolha uma opcao: ");
-        	
-        	opcao = leitor.nextInt();
-        	leitor.nextLine();
-        	
-        	switch (opcao) {
-            case 1:
-            	System.out.print("\n-- Adicao de cliente PF --\n");
-                System.out.print("Nome: ");
-                String nomepf = leitor.nextLine();
-                System.out.print("Email: ");
-                String emailpf = leitor.nextLine();
-                System.out.print("CPF: ");
-                String cpf = leitor.nextLine();
-                
-                Pf clientepf = new Pf(nomepf, emailpf, cpf);
-                banco.addCliente(clientepf);
-                System.out.println("Feito!\n");
-                break;
-            case 2:
-            	System.out.print("\n-- Adicao de cliente PJ --\n");
-                System.out.print("Nome: ");
-                String nomepj = leitor.nextLine();
-                System.out.print("Email: ");
-                String emailpj = leitor.nextLine();
-                System.out.print("CNPJ: ");
-                String cnpj = leitor.nextLine();
-                
-                Pf clientepj = new Pf(nomepj, emailpj, cnpj);
-                banco.addCliente(clientepj);
-                System.out.println("Feito!\n");
-                break;
-            case 3:
-            	System.out.print("\n-- Listagem de clientes --\n");
-                banco.lerClientes();
-                System.out.print("\n");
-                break;
-            case 4:
-            	System.out.print("\n-- Adicao de produto renda fixa --\n");
-                System.out.print("Nome: ");
-                String nomeProdutorf = leitor.nextLine();
-                System.out.print("Rendimento: ");
-                double rendimentorf = leitor.nextDouble();
-                System.out.print("Carencia (dias): ");
-                int carenciarf = leitor.nextInt();
-                
-                RendaFixa produtorf = new RendaFixa(nomeProdutorf, rendimentorf, carenciarf);
-                banco.addProduto(produtorf);
-                System.out.println("Feito!\n");
-                break;
-            case 5:
-            	System.out.print("\n-- Adicao de produto renda variavel --\n");
-                System.out.print("Nome: ");
-                String nomeProdutorv = leitor.nextLine();
-                System.out.print("Rendimento: ");
-                double rendimentorv = leitor.nextDouble();
-                
-                RendaVariavel produtorv = new RendaVariavel(nomeProdutorv, rendimentorv);
-                banco.addProduto(produtorv);
-                System.out.println("Feito!\n");
-                break;
-            case 6:
-            	System.out.print("\n--Listagem de produtos --\n");
-                banco.lerProdutos();
-                System.out.print("\n");
-                break;
-            case 7:
-            	System.out.print("\n-- Simulacao de rendimento --\n");
-            	if (banco.clientes.isEmpty() || banco.produtos.isEmpty()) {
-            		System.out.println("Cadastre um cliente e um produto primeiro");
-            		break;
-            	}
-            	
-            	System.out.println("Escolha o cliente: ");
-            	for (int i = 0; i < banco.clientes.size(); i++) {
-            		System.out.println(i+1 + " - " + banco.clientes.get(i).nome);
-            	}
-            	int idCli = leitor.nextInt();
-            	idCli--;
-            	
-            	System.out.println("Escolha o produto: ");
-            	for (int i = 0; i < banco.produtos.size(); i++) {
-            		System.out.println(i+1 + " - " + banco.produtos.get(i).nome);
-            	}
-            	int idProd = leitor.nextInt();
-            	idProd--;
-            	
-            	System.out.println("Dias (30, 60, 90, 180):");
-            	int dias = leitor.nextInt();
-            	
-            	System.out.println("Valor a investir: ");
-            	double valor = leitor.nextDouble();
-            	
-            	Cliente cli = banco.clientes.get(idCli);
-            	Produto prod = banco.produtos.get(idProd);
-            	
-            	Investimento inv = new Investimento(valor);
-            	inv.adicionar(prod);
-            	cli.adicionar(inv);
-            	
-            	double lucro = inv.calcular(dias, cli.getTaxa());
-            	
-            	System.out.printf("Lucro estimado: %.2f\n", lucro);
-            	break;
-            case 8:
-            	System.out.print("\n-- Simulacao de conta CDI --\n");
-            	System.out.println("Valor na conta: ");
-            	double saldo = leitor.nextDouble();
-            	
-            	System.out.println("Dias: ");
-            	int prazo = leitor.nextInt();
-            	
-            	Cdi contaCdi = new Cdi(saldo);
-            	double ganho = contaCdi.calcular(prazo, 0);
-            	
-            	System.out.printf("Lucro do CDI: %.2f\n", ganho);
-            	break;
-            case 9:
-                System.out.println("\nFim\n");
-                break;
-            default:
-                System.out.println("\nOpcao Invalida\n");
-        	}
-        	
-        }
-        leitor.close();
-    }
+	public static void main(String[] args) {
+		Db banco = new Db();
+		Scanner leitor = new Scanner(System.in);
+		int opcao = 0;
+
+		while (opcao != 11) {
+			System.out.println("\n--- VcRiquinho ---");
+			System.out.println("1 - Novo Cliente");
+			System.out.println("2 - Ler Clientes");
+			System.out.println("3 - Atualizar Cliente");
+			System.out.println("4 - Excluir Cliente");
+			System.out.println("5 - Novo Produto");
+			System.out.println("6 - Ler Produtos");
+			System.out.println("7 - Atualizar Produto");
+			System.out.println("8 - Excluir Produto");
+			System.out.println("9 - Simular Rendimento");
+			System.out.println("10 - Simular Conta CDI");
+			System.out.println("11 - Sair");
+			System.out.print("Escolha: ");
+
+			opcao = leitor.nextInt();
+			leitor.nextLine();
+
+			switch (opcao) {
+			case 1: {
+				System.out.print("Tipo (1-PF 2-PJ): ");
+				int tipoCliente = leitor.nextInt();
+				leitor.nextLine();
+
+				System.out.print("Nome: ");
+				String nome = leitor.nextLine();
+				System.out.print("Email: ");
+				String email = leitor.nextLine();
+
+				Cliente cliente;
+				if (tipoCliente == 1) {
+					System.out.print("CPF: ");
+					String doc = leitor.nextLine();
+					cliente = new Pf(nome, email, doc);
+				} else {
+					System.out.print("CNPJ: ");
+					String doc = leitor.nextLine();
+					cliente = new Pj(nome, email, doc);
+				}
+
+				System.out.print("Conta inicial (1-Corrente 2-CDI 3-Investimento): ");
+				int tipoConta = leitor.nextInt();
+				System.out.print("Saldo: ");
+				double saldo = leitor.nextDouble();
+
+				if (tipoConta == 1) {
+					cliente.adicionar(new ContaCorrente(saldo));
+				} else if (tipoConta == 2) {
+					cliente.adicionar(new Cdi(saldo));
+				} else {
+					cliente.adicionar(new Investimento(saldo));
+				}
+
+				banco.addCliente(cliente);
+				System.out.println("Feito!");
+				break;
+			}
+			case 2: {
+				for (int i = 0; i < banco.getClientes().size(); i++) {
+					System.out.println((i + 1) + " - " + banco.getClientes().get(i).getNome() + " ("
+							+ banco.getClientes().get(i).getEmail() + ")");
+				}
+				break;
+			}
+			case 3: {
+				System.out.print("Numero do cliente: ");
+				int pos = leitor.nextInt();
+				leitor.nextLine();
+
+				Cliente atual = banco.getClientes().get(pos - 1);
+
+				System.out.print("Novo nome (" + atual.getNome() + ") ou Enter para manter: ");
+				String novoNome = leitor.nextLine();
+				if (!novoNome.isEmpty()) {
+					atual.setNome(novoNome);
+				}
+
+				System.out.print("Novo email (" + atual.getEmail() + ") ou Enter para manter: ");
+				String novoEmail = leitor.nextLine();
+				if (!novoEmail.isEmpty()) {
+					atual.setEmail(novoEmail);
+				}
+
+				System.out.println("Feito!");
+				break;
+			}
+			case 4: {
+				System.out.print("Numero do cliente: ");
+				int remover = leitor.nextInt();
+				banco.delCliente(remover - 1);
+				System.out.println("Feito!");
+				break;
+			}
+			case 5: {
+				System.out.print("Tipo (1-Fixo 2-Variavel): ");
+				int tipoProduto = leitor.nextInt();
+				leitor.nextLine();
+
+				System.out.print("Nome: ");
+				String nome = leitor.nextLine();
+				System.out.print("Descricao: ");
+				String texto = leitor.nextLine();
+				System.out.print("Rendimento: ");
+				double ganho = leitor.nextDouble();
+
+				if (tipoProduto == 1) {
+					System.out.print("Carencia: ");
+					int limite = leitor.nextInt();
+					RendaFixa produto = new RendaFixa(nome, texto, ganho, limite);
+					banco.addProduto(produto);
+				} else {
+					RendaVariavel produto = new RendaVariavel(nome, texto, ganho);
+					banco.addProduto(produto);
+				}
+				System.out.println("Feito!");
+				break;
+			}
+			case 6: {
+				for (int i = 0; i < banco.getProdutos().size(); i++) {
+					System.out.println((i + 1) + " - " + banco.getProdutos().get(i).getNome() + " | "
+							+ banco.getProdutos().get(i).getDescricao() + " (Rendimento: "
+							+ banco.getProdutos().get(i).getRendimento() + ")");
+				}
+				break;
+			}
+			case 7: {
+				System.out.print("Numero do produto: ");
+				int lugar = leitor.nextInt();
+				leitor.nextLine();
+
+				Produto prod = banco.getProdutos().get(lugar - 1);
+
+				System.out.print("Novo nome (" + prod.getNome() + ") ou Enter para manter: ");
+				String novoNome = leitor.nextLine();
+				if (!novoNome.isEmpty()) {
+					prod.setNome(novoNome);
+				}
+
+				System.out.print("Nova descricao (" + prod.getDescricao() + ") ou Enter para manter: ");
+				String novaDesc = leitor.nextLine();
+				if (!novaDesc.isEmpty()) {
+					prod.setDescricao(novaDesc);
+				}
+
+				System.out.print("Novo rendimento (" + prod.getRendimento() + ") ou Enter para manter: ");
+				String novoGanho = leitor.nextLine();
+				if (!novoGanho.isEmpty()) {
+					prod.setRendimento(Double.parseDouble(novoGanho));
+				}
+
+				System.out.println("Feito!");
+				break;
+			}
+			case 8: {
+				System.out.print("Numero do produto: ");
+				int apagar = leitor.nextInt();
+				banco.delProduto(apagar - 1);
+				System.out.println("Feito!");
+				break;
+			}
+			case 9: {
+				System.out.print("Numero do cliente: ");
+				int posCli = leitor.nextInt();
+				System.out.print("Numero do produto: ");
+				int posProd = leitor.nextInt();
+				System.out.print("Dias: ");
+				int dias = leitor.nextInt();
+				System.out.print("Valor: ");
+				double valor = leitor.nextDouble();
+
+				Cliente c = banco.getClientes().get(posCli - 1);
+				Produto p = banco.getProdutos().get(posProd - 1);
+
+				Investimento conta = new Investimento(valor);
+				conta.adicionar(p);
+				c.adicionar(conta);
+
+				double lucro = conta.calcular(dias, c.getTaxa());
+				System.out.println("Lucro liquido: " + lucro);
+				break;
+			}
+			case 10: {
+				System.out.print("Valor na conta: ");
+				double dinheiro = leitor.nextDouble();
+				System.out.print("Dias: ");
+				int prazo = leitor.nextInt();
+
+				Cdi conta = new Cdi(dinheiro);
+				double resultado = conta.calcular(prazo, 0);
+
+				System.out.println("Lucro liquido do CDI: " + resultado);
+				break;
+			}
+			case 11: {
+				System.out.println("Fim");
+				break;
+			}
+			default: {
+				System.out.println("Invalido");
+			}
+			}
+		}
+		leitor.close();
+	}
 }

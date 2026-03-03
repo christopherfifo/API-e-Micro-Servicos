@@ -1,9 +1,17 @@
 package exercicios34_vcRiquinho;
 
-public abstract class Conta implements Simulador {
-    double saldo;
+abstract class Conta implements Simulador {
+	private double saldo;
 
-    public Conta(double saldo) {
-        this.saldo = saldo;
-    }
+	public Conta(double saldo) {
+		this.saldo = saldo;
+	}
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
 }

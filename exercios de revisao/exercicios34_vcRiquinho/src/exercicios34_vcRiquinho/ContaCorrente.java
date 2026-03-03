@@ -1,13 +1,12 @@
 package exercicios34_vcRiquinho;
 
-
-public class ContaCorrente extends Conta {
+class ContaCorrente extends Conta {
 	public ContaCorrente(double saldo) {
-        super(saldo);
-    }
+		super(saldo);
+	}
 
-    @Override
-    public double calcular(int dias, double taxa) {
-        return 0; // nao altera a conta
-    }
+	@Override
+	public double calcular(int dias, double taxa) {
+		return 0;
+	}
 }
