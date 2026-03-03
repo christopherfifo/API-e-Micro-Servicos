@@ -8,7 +8,7 @@ public class App {
 		Scanner leitor = new Scanner(System.in);
 		int opcao = 0;
 
-		while (opcao != 11) {
+		while (opcao != 10) {
 			System.out.println("\n--- VcRiquinho ---");
 			System.out.println("1 - Novo Cliente");
 			System.out.println("2 - Ler Clientes");
@@ -18,9 +18,8 @@ public class App {
 			System.out.println("6 - Ler Produtos");
 			System.out.println("7 - Atualizar Produto");
 			System.out.println("8 - Excluir Produto");
-			System.out.println("9 - Simular Rendimento");
-			System.out.println("10 - Simular Conta CDI");
-			System.out.println("11 - Sair");
+			System.out.println("9 - Simular Rendimento do Cliente");
+			System.out.println("10 - Sair");
 			System.out.print("Escolha: ");
 
 			opcao = leitor.nextInt();
@@ -79,13 +78,13 @@ public class App {
 
 				Cliente atual = banco.getClientes().get(pos - 1);
 
-				System.out.print("Novo nome (" + atual.getNome() + ") ou Enter para manter: ");
+				System.out.print("Novo nome (" + atual.getNome() + ") ou enter para manter: ");
 				String novoNome = leitor.nextLine();
 				if (!novoNome.isEmpty()) {
 					atual.setNome(novoNome);
 				}
 
-				System.out.print("Novo email (" + atual.getEmail() + ") ou Enter para manter: ");
+				System.out.print("Novo email (" + atual.getEmail() + ") ou enter para manter: ");
 				String novoEmail = leitor.nextLine();
 				if (!novoEmail.isEmpty()) {
 					atual.setEmail(novoEmail);
@@ -110,8 +109,8 @@ public class App {
 				String nome = leitor.nextLine();
 				System.out.print("Descricao: ");
 				String texto = leitor.nextLine();
-				System.out.print("Rendimento: ");
-				double ganho = leitor.nextDouble();
+				System.out.print("Rendimento (% ao mes): ");
+				double ganho = leitor.nextDouble() / 100.0;
 
 				if (tipoProduto == 1) {
 					System.out.print("Carencia: ");
@@ -129,7 +128,7 @@ public class App {
 				for (int i = 0; i < banco.getProdutos().size(); i++) {
 					System.out.println((i + 1) + " - " + banco.getProdutos().get(i).getNome() + " | "
 							+ banco.getProdutos().get(i).getDescricao() + " (Rendimento: "
-							+ banco.getProdutos().get(i).getRendimento() + ")");
+							+ (banco.getProdutos().get(i).getRendimento() * 100) + "%)");
 				}
 				break;
 			}
@@ -140,22 +139,22 @@ public class App {
 
 				Produto prod = banco.getProdutos().get(lugar - 1);
 
-				System.out.print("Novo nome (" + prod.getNome() + ") ou Enter para manter: ");
+				System.out.print("Novo nome (" + prod.getNome() + ") ou enter para manter: ");
 				String novoNome = leitor.nextLine();
 				if (!novoNome.isEmpty()) {
 					prod.setNome(novoNome);
 				}
 
-				System.out.print("Nova descricao (" + prod.getDescricao() + ") ou Enter para manter: ");
+				System.out.print("Nova descricao (" + prod.getDescricao() + ") ou enter para manter: ");
 				String novaDesc = leitor.nextLine();
 				if (!novaDesc.isEmpty()) {
 					prod.setDescricao(novaDesc);
 				}
 
-				System.out.print("Novo rendimento (" + prod.getRendimento() + ") ou Enter para manter: ");
+				System.out.print("Novo rendimento em % (" + (prod.getRendimento() * 100) + ") ou enter para manter: ");
 				String novoGanho = leitor.nextLine();
 				if (!novoGanho.isEmpty()) {
-					prod.setRendimento(Double.parseDouble(novoGanho));
+					prod.setRendimento(Double.parseDouble(novoGanho) / 100.0);
 				}
 
 				System.out.println("Feito!");
@@ -169,39 +168,39 @@ public class App {
 				break;
 			}
 			case 9: {
+				if (banco.getClientes().isEmpty()) {
+					System.out.println("Nenhum cliente cadastrado!");
+					break;
+				}
+
 				System.out.print("Numero do cliente: ");
 				int posCli = leitor.nextInt();
-				System.out.print("Numero do produto: ");
-				int posProd = leitor.nextInt();
-				System.out.print("Dias: ");
+				System.out.print("Dias (30, 60, 90, 180): ");
 				int dias = leitor.nextInt();
-				System.out.print("Valor: ");
-				double valor = leitor.nextDouble();
 
 				Cliente c = banco.getClientes().get(posCli - 1);
-				Produto p = banco.getProdutos().get(posProd - 1);
+				double lucroTotal = 0;
 
-				Investimento conta = new Investimento(valor);
-				conta.adicionar(p);
-				c.adicionar(conta);
+				System.out.println("\n--- Simulacao ---");
+				for (Conta conta : c.getContas()) {
+					if (conta instanceof Investimento) {
+						Investimento inv = (Investimento) conta;
+						inv.getProdutos().clear();
+						for (Produto p : banco.getProdutos()) {
+							inv.adicionar(p);
+						}
+					}
 
-				double lucro = conta.calcular(dias, c.getTaxa());
-				System.out.println("Lucro liquido: " + lucro);
+					double lucroConta = conta.calcular(dias, c.getTaxa());
+					lucroTotal += lucroConta;
+
+					System.out.println(conta.getClass().getSimpleName() + ", saldo inicial: R$" + conta.getSaldo());
+					System.out.println("Lucro Liquido: R$" + lucroConta);
+				}
+
 				break;
 			}
 			case 10: {
-				System.out.print("Valor na conta: ");
-				double dinheiro = leitor.nextDouble();
-				System.out.print("Dias: ");
-				int prazo = leitor.nextInt();
-
-				Cdi conta = new Cdi(dinheiro);
-				double resultado = conta.calcular(prazo, 0);
-
-				System.out.println("Lucro liquido do CDI: " + resultado);
-				break;
-			}
-			case 11: {
 				System.out.println("Fim");
 				break;
 			}
